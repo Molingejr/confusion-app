@@ -228,4 +228,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToprops)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
