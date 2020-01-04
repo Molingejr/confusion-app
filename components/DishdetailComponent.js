@@ -4,6 +4,7 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -24,31 +25,33 @@ function RenderDish(props) {
 
     if (dish != null) {
         return (
-            <Card
-                featuredTitle={dish.name}
-                image={{ uri: baseUrl + dish.image }}>
-                <Text style={{ margin: 10 }}>
-                    {dish.description}
-                </Text>
-                <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
-                    <Icon
-                        raised
-                        reverse
-                        name={props.favorite ? 'heart' : 'heart-o'}
-                        type='font-awesome'
-                        color='#f50'
-                        onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
-                    />
-                    <Icon
-                        raised
-                        reverse
-                        name='pencil-square'
-                        type='font-awesome'
-                        color='#512DA8'
-                        onPress={() => props.openAddComment()}
-                    />
-                </View>
-            </Card>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                <Card
+                    featuredTitle={dish.name}
+                    image={{ uri: baseUrl + dish.image }}>
+                    <Text style={{ margin: 10 }}>
+                        {dish.description}
+                    </Text>
+                    <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
+                        <Icon
+                            raised
+                            reverse
+                            name={props.favorite ? 'heart' : 'heart-o'}
+                            type='font-awesome'
+                            color='#f50'
+                            onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
+                        />
+                        <Icon
+                            raised
+                            reverse
+                            name='pencil-square'
+                            type='font-awesome'
+                            color='#512DA8'
+                            onPress={() => props.openAddComment()}
+                        />
+                    </View>
+                </Card>
+            </Animatable.View>
         );
     }
     else {
@@ -76,13 +79,15 @@ function RenderComments(props) {
     }
 
     return (
-        <Card title='Comments' >
-            <FlatList
-                data={comments}
-                renderItem={renderCommentItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+            <Card title='Comments' >
+                <FlatList
+                    data={comments}
+                    renderItem={renderCommentItem}
+                    keyExtractor={item => item.id.toString()}
+                />
+            </Card>
+        </Animatable.View>
     );
 }
 
@@ -141,10 +146,10 @@ class Dishdetail extends Component {
                                 <Icon
                                     type='font-awesome'
                                     name='user-o'
-                                    size={24}                        
+                                    size={24}
                                 />
                             }
-                            onChange={(author) => this.setState({author: author})}
+                            onChange={(author) => this.setState({ author: author })}
                         />
                         <Input
                             placeholder=' Comment'
@@ -152,10 +157,10 @@ class Dishdetail extends Component {
                                 <Icon
                                     type='font-awesome'
                                     name='comment-o'
-                                    size={24}  
+                                    size={24}
                                 />
                             }
-                            onChange={(comment) => this.setState({comment: comment})}
+                            onChange={(comment) => this.setState({ comment: comment })}
                         />
 
                         <Button
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         margin: 20
     },
-    
+
     Button: {
         margin: 15,
         marginBottom: 5
