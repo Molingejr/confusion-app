@@ -4,6 +4,8 @@ import { Icon, Input, CheckBox, Button } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { Asset } from 'expo-asset';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { createBottomTabNavigator } from 'react-navigation';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -77,22 +79,22 @@ class LoginTab extends Component {
                     onPress={() => this.setState({ remember: !this.state.remember })}
                     containerStyle={styles.formCheckbox}
                 />
-                 <View style={styles.formButton}>
+                <View style={styles.formButton}>
                     <Button
                         onPress={() => this.handleLogin()}
                         title="Login"
                         icon={
                             <Icon
                                 name='sign-in'
-                                type='font-awesome'            
+                                type='font-awesome'
                                 size={24}
-                                color= 'white'
+                                color='white'
                             />
                         }
                         buttonStyle={{
                             backgroundColor: "#512DA8"
                         }}
-                        />
+                    />
                 </View>
                 <View style={styles.formButton}>
                     <Button
@@ -102,15 +104,15 @@ class LoginTab extends Component {
                         icon={
                             <Icon
                                 name='user-plus'
-                                type='font-awesome'            
+                                type='font-awesome'
                                 size={24}
-                                color= 'blue'
+                                color='blue'
                             />
                         }
                         titleStyle={{
                             color: "blue"
                         }}
-                        />
+                    />
                 </View>
             </View>
         );
@@ -145,9 +147,22 @@ class RegisterTab extends Component {
             });
             if (!capturedImage.cancelled) {
                 console.log(capturedImage);
-                this.setState({ imageUrl: capturedImage.uri });
+                this.processImage(capturedImage.uri);
             }
         }
+
+    }
+
+    processImage = async (imageUri) => {
+        let processedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                { resize: { width: 400 } }
+            ],
+            { format: 'png' }
+        );
+        console.log(processedImage);
+        this.setState({ imageUrl: processedImage.uri });
 
     }
 
@@ -259,9 +274,9 @@ const styles = StyleSheet.create({
         margin: 20
     },
     image: {
-      margin: 10,
-      width: 80,
-      height: 60
+        margin: 10,
+        width: 80,
+        height: 60
     },
     formInput: {
         margin: 20
@@ -279,12 +294,12 @@ const Login = createBottomTabNavigator({
     Login: LoginTab,
     Register: RegisterTab
 }, {
-    tabBarOptions: {
-        activeBackgroundColor: '#9575CD',
-        inactiveBackgroundColor: '#D1C4E9',
-        activeTintColor: '#ffffff',
-        inactiveTintColor: 'gray'
-    }
-});
+        tabBarOptions: {
+            activeBackgroundColor: '#9575CD',
+            inactiveBackgroundColor: '#D1C4E9',
+            activeTintColor: '#ffffff',
+            inactiveTintColor: 'gray'
+        }
+    });
 
 export default Login;
